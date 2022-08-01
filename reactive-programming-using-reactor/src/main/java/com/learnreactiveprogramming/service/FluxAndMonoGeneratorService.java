@@ -8,11 +8,11 @@ public class FluxAndMonoGeneratorService {
 
     public Flux<String> namesFlux() {
         // This flux can be created from DB or remote service call
-        return Flux.fromIterable(List.of("Max", "Alex", "Nick"));
+        return Flux.fromIterable(List.of("Max", "Alex", "Nick")).log();
     }
 
     public Mono<String> nameMono() {
-        return Mono.just("Max");
+        return Mono.just("Max").log();
     }
 
     public static void main(String[] args) {
