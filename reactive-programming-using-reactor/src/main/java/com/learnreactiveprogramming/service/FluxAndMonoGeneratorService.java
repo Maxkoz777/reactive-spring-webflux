@@ -31,6 +31,15 @@ public class FluxAndMonoGeneratorService {
         return Flux.fromIterable(List.of("Max", "Alex", "Nick")).filter(name -> name.length() < 4).log();
     }
 
+    public Mono<List<String>> namesMonoFlatMap() {
+        return Mono.just("Max")
+            .flatMap(name -> {
+                var letters = name.split("");
+                return Mono.just(List.of(letters));
+            })
+            .log();
+    }
+
     public Flux<String> namesFluxFlatMap() {
         return Flux.fromIterable(List.of("Max", "Alex", "Nick"))
             .filter(name -> name.length() < 4)
