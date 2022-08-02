@@ -50,6 +50,16 @@ public class FluxAndMonoGeneratorService {
             .log();
     }
 
+    public Flux<String> namesFluxFlatMapMany() {
+        return Mono.just("Max")
+            .filter(name -> name.length() < 4)
+            .flatMapMany(name -> {
+                var chars = name.split("");
+                return Flux.fromArray(chars);
+            })
+            .log();
+    }
+
     public static void main(String[] args) {
 
         FluxAndMonoGeneratorService fluxAndMonoGeneratorService = new FluxAndMonoGeneratorService();
