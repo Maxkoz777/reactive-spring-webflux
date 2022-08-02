@@ -19,6 +19,14 @@ public class FluxAndMonoGeneratorService {
         return Flux.fromIterable(List.of("Max", "Alex", "Nick")).map(String::toUpperCase).log();
     }
 
+
+    public Flux<String> namesFluxImmutability() {
+        var flux = Flux.fromIterable(List.of("Max", "Alex", "Nick")).log();
+        // new flux is created, elements are not upper case in returning flux
+        flux.map(String::toUpperCase);
+        return flux;
+    }
+
     public static void main(String[] args) {
 
         FluxAndMonoGeneratorService fluxAndMonoGeneratorService = new FluxAndMonoGeneratorService();
