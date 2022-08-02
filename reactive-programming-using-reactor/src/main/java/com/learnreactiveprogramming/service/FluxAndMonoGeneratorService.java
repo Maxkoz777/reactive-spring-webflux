@@ -27,6 +27,10 @@ public class FluxAndMonoGeneratorService {
         return flux;
     }
 
+    public Flux<String> namesFluxFilter() {
+        return Flux.fromIterable(List.of("Max", "Alex", "Nick")).filter(name -> name.length() < 4).log();
+    }
+
     public static void main(String[] args) {
 
         FluxAndMonoGeneratorService fluxAndMonoGeneratorService = new FluxAndMonoGeneratorService();
