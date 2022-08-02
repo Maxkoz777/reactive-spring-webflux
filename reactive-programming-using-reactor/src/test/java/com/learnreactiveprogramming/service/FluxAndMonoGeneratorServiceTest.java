@@ -26,4 +26,16 @@ class FluxAndMonoGeneratorServiceTest {
 
     }
 
+    @Test
+    void namesFluxMap() {
+        // given
+
+        // when
+        var flux = fluxAndMonoGeneratorService.namesFluxMap();
+
+        // then
+        StepVerifier.create(flux)
+            .expectNext("MAX", "ALEX", "NICK")
+            .verifyComplete();
+    }
 }
