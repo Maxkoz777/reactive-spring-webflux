@@ -64,4 +64,15 @@ class FluxAndMonoGeneratorServiceTest {
             .expectNextCount(1)
             .verifyComplete();
     }
+
+    @Test
+    void namesFluxFlatMap() {
+        // when
+        var flux = fluxAndMonoGeneratorService.namesFluxFlatMap();
+
+        // then
+        StepVerifier.create(flux)
+            .expectNext("M", "a", "x")
+            .verifyComplete();
+    }
 }
