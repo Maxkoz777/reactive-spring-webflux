@@ -139,4 +139,26 @@ class FluxAndMonoGeneratorServiceTest {
             .expectNext("a", "b", "c", "d")
             .verifyComplete();
     }
+
+    @Test
+    void zip2Example() {
+        // when
+        var value = fluxAndMonoGeneratorService.zip2Example();
+
+        // then
+        StepVerifier.create(value)
+            .expectNext("ac", "bd")
+            .verifyComplete();
+    }
+
+    @Test
+    void zip4Example() {
+        // when
+        var value = fluxAndMonoGeneratorService.zip4Example();
+
+        // then
+        StepVerifier.create(value)
+            .expectNext("ac13", "bd24")
+            .verifyComplete();
+    }
 }

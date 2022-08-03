@@ -91,6 +91,21 @@ public class FluxAndMonoGeneratorService {
         return Flux.mergeSequential(ab, cd);
     }
 
+    public Flux<String> zip2Example() {
+        var ab = Flux.just("a", "b");
+        var cd = Flux.just("c", "d");
+        return ab.zipWith(cd, (first, second) -> first + second);
+    }
+
+    public Flux<String> zip4Example() {
+        var ab = Flux.just("a", "b");
+        var cd = Flux.just("c", "d");
+        var first = Flux.just("1", "2");
+        var second = Flux.just("3", "4");
+        return Flux.zip(ab, cd, first, second)
+            .map(tuple4 -> tuple4.getT1() + tuple4.getT2() + tuple4.getT3() + tuple4.getT4());
+    }
+
     public static void main(String[] args) {
 
         FluxAndMonoGeneratorService fluxAndMonoGeneratorService = new FluxAndMonoGeneratorService();
