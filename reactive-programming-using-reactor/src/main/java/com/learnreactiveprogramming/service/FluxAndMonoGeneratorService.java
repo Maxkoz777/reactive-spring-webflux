@@ -74,6 +74,14 @@ public class FluxAndMonoGeneratorService {
             .log();
     }
 
+    public Flux<String> concatExample() {
+        var a = Flux.just("a");
+        var b = Flux.just("b");
+        var ab = Flux.concat(a, b);
+        var c = Flux.just("c");
+        return ab.concatWith(c);
+    }
+
     public static void main(String[] args) {
 
         FluxAndMonoGeneratorService fluxAndMonoGeneratorService = new FluxAndMonoGeneratorService();
