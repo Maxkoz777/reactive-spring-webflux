@@ -1,5 +1,6 @@
 package com.learnreactiveprogramming.service;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 import reactor.core.publisher.Flux;
@@ -80,6 +81,14 @@ public class FluxAndMonoGeneratorService {
         var ab = Flux.concat(a, b);
         var c = Flux.just("c");
         return ab.concatWith(c);
+    }
+
+    public Flux<String> mergeSequentialExample() {
+        var a = Flux.just("a");
+        var b = Flux.just("b");
+        var ab = Flux.concat(a, b).delayElements(Duration.ofMillis(100));
+        var cd = Flux.just("c", "d").delayElements(Duration.ofMillis(90));
+        return Flux.mergeSequential(ab, cd);
     }
 
     public static void main(String[] args) {

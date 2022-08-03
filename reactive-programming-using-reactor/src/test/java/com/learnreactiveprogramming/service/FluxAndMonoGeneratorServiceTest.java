@@ -128,4 +128,15 @@ class FluxAndMonoGeneratorServiceTest {
             .expectNext("a", "b", "c")
             .verifyComplete();
     }
+
+    @Test
+    void mergeSequentialExample() {
+        // when
+        var value = fluxAndMonoGeneratorService.mergeSequentialExample();
+
+        // then
+        StepVerifier.create(value)
+            .expectNext("a", "b", "c", "d")
+            .verifyComplete();
+    }
 }
