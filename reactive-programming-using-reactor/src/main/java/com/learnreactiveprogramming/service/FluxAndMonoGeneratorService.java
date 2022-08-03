@@ -1,6 +1,7 @@
 package com.learnreactiveprogramming.service;
 
 import java.util.List;
+import java.util.function.Function;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -47,6 +48,19 @@ public class FluxAndMonoGeneratorService {
                 var chars = name.split("");
                 return Flux.fromArray(chars);
             })
+            .log();
+    }
+
+    public Flux<String> namesFluxTransform() {
+
+        Function<Flux<String>, Flux<String>> commonLogic = element -> element.filter(name -> name.length() < 4)
+            .flatMap(name -> {
+                var chars = name.split("");
+                return Flux.fromArray(chars);
+            });
+
+        return Flux.fromIterable(List.of("Max", "Alex", "Nick"))
+            .transform(commonLogic)
             .log();
     }
 

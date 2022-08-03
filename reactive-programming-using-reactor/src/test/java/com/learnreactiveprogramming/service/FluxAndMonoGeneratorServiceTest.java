@@ -11,6 +11,14 @@ class FluxAndMonoGeneratorServiceTest {
     FluxAndMonoGeneratorService fluxAndMonoGeneratorService = new FluxAndMonoGeneratorService();
 
     @Test
+    void nameMono() {
+    }
+
+    @Test
+    void main() {
+    }
+
+    @Test
     void namesFlux() {
         // given
 
@@ -100,10 +108,13 @@ class FluxAndMonoGeneratorServiceTest {
     }
 
     @Test
-    void nameMono() {
-    }
+    void namesFluxTransform() {
+        // when
+        var value = fluxAndMonoGeneratorService.namesFluxTransform();
 
-    @Test
-    void main() {
+        // then
+        StepVerifier.create(value)
+            .expectNext("M", "a", "x")
+            .verifyComplete();
     }
 }
