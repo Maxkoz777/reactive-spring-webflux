@@ -1,4 +1,4 @@
-package com.eractivespring.moviesinfoservice;
+package com.reactivespring.moviesinfoservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
