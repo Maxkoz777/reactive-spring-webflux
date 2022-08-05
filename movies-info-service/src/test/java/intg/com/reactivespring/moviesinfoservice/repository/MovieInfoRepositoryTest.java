@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.reactivespring.moviesinfoservice.domain.MovieInfo;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
