@@ -76,7 +76,31 @@ class MovieInfoRepositoryTest {
                 assertEquals("name", movieInfo.getName());
             })
             .verifyComplete();
-
     }
+
+    @Test
+    void update() {
+        var movieInfo = movieInfoRepository.findById("id").block();
+        assertNotNull(movieInfo);
+        movieInfo.setName("updated");
+        movieInfoRepository.save(movieInfo)
+            .log()
+            .as(StepVerifier::create)
+            .assertNext(movieInfo1 -> {
+                assertNotNull(movieInfo1.getMovieInfoId());
+                assertEquals("updated", movieInfo1.getName());
+            })
+            .verifyComplete();
+    }
+
+//    @Test
+//    void delete() {
+//        movieInfoRepository.deleteById("id").block();
+//        movieInfoRepository.findAll()
+//            .log()
+//            .as(StepVerifier::create)
+//            .expectNextCount(2)
+//            .verifyComplete();
+//    }
 
 }
