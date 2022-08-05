@@ -1,14 +1,15 @@
 package com.reactivespring.moviesinfoservice.service;
 
 import com.reactivespring.moviesinfoservice.domain.MovieInfo;
+import reactor.core.publisher.Mono;
 
 public interface MovieInfoService {
 
 
     /**
      * adds movie info to mongo
-     * @param movieInfo is a instance to add
+     * @param movieInfo is an instance to add
      */
-    void addMovieInfo(MovieInfo movieInfo);
+    Mono<MovieInfo> addMovieInfo(MovieInfo movieInfo);
 
 }
