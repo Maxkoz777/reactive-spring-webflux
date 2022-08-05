@@ -93,14 +93,14 @@ class MovieInfoRepositoryTest {
             .verifyComplete();
     }
 
-//    @Test
-//    void delete() {
-//        movieInfoRepository.deleteById("id").block();
-//        movieInfoRepository.findAll()
-//            .log()
-//            .as(StepVerifier::create)
-//            .expectNextCount(2)
-//            .verifyComplete();
-//    }
+    @Test
+    void delete() {
+        movieInfoRepository.deleteById("id").block();
+        movieInfoRepository.findAll()
+            .log()
+            .as(StepVerifier::create)
+            .expectNextCount(2)
+            .verifyComplete();
+    }
 
 }
