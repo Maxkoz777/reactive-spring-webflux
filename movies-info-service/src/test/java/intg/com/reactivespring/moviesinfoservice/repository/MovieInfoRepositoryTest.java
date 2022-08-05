@@ -59,4 +59,24 @@ class MovieInfoRepositoryTest {
             .verifyComplete();
     }
 
+    @Test
+    void save() {
+        movieInfoRepository.save(
+            new MovieInfo(null,
+                          "name",
+                          2005,
+                          List.of("actor1", "actor2"),
+                          LocalDate.parse("2008-07-18")
+            )
+        )
+            .log()
+            .as(StepVerifier::create)
+            .assertNext(movieInfo -> {
+                assertNotNull(movieInfo.getMovieInfoId());
+                assertEquals("name", movieInfo.getName());
+            })
+            .verifyComplete();
+
+    }
+
 }
