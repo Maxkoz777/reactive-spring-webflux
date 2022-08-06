@@ -7,6 +7,7 @@ import com.reactivespring.moviesinfoservice.repository.MovieInfoRepository;
 import com.reactivespring.moviesinfoservice.service.MovieInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -20,5 +21,10 @@ public class MovieInfoServiceImpl implements MovieInfoService {
     public Mono<MovieInfo> addMovieInfo(MovieInfoDto movieInfoDto) {
         var movieInfo = movieInfoMapper.movieInfoDtoToMovieInfo(movieInfoDto);
         return movieInfoRepository.save(movieInfo).log();
+    }
+
+    @Override
+    public Flux<MovieInfo> getAllMovieInfos() {
+        return movieInfoRepository.findAll().log();
     }
 }
