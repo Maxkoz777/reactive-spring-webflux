@@ -2,7 +2,7 @@ package com.reactivespring.moviesinfoservice.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.reactivespring.moviesinfoservice.domain.MovieInfo;
+import com.reactivespring.moviesinfoservice.domain.entity.MovieInfo;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;

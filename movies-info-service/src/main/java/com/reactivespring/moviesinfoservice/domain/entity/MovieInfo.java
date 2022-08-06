@@ -1,4 +1,4 @@
-package com.reactivespring.moviesinfoservice.domain;
+package com.reactivespring.moviesinfoservice.domain.entity;
 
 import java.time.LocalDate;
 import java.util.List;
