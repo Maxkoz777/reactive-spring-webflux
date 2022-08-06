@@ -21,4 +21,11 @@ public interface MovieInfoService {
      */
     Flux<MovieInfo> getAllMovieInfos();
 
+    /**
+     *
+     * @param id - movie info id
+     * @return movieInfo by provided id
+     */
+    Mono<MovieInfo> getMovieInfoById(String id);
+
 }
