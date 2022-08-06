@@ -28,4 +28,25 @@ public interface MovieInfoService {
      */
     Mono<MovieInfo> getMovieInfoById(String id);
 
+    /**
+     *
+     * @param id - id for movie info
+     * @param movieInfoDto - dto to update existing entity
+     * @return updated movieInfo
+     */
+    Mono<MovieInfo> updateMovieInfo(String id, MovieInfoDto movieInfoDto);
+
+    /**
+     *
+     * @param id - id of entity to remove
+     * @return void type
+     */
+    Mono<Void> deleteMovieInfoById(String id);
+
+    /**
+     * deletes all elements from storage
+     * @return void type
+     */
+    Mono<Void> deleteAll();
+
 }

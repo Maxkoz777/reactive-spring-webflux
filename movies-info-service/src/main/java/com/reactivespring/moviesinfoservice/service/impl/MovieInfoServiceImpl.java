@@ -32,4 +32,23 @@ public class MovieInfoServiceImpl implements MovieInfoService {
     public Mono<MovieInfo> getMovieInfoById(String id) {
         return movieInfoRepository.findById(id).log();
     }
+
+    @Override
+    public Mono<MovieInfo> updateMovieInfo(String id, MovieInfoDto movieInfoDto) {
+        return movieInfoRepository.findById(id).log()
+            .flatMap(movieInfo -> {
+                movieInfoMapper.updateMovieInfoFromDto(movieInfoDto, movieInfo);
+                return movieInfoRepository.save(movieInfo);
+            });
+    }
+
+    @Override
+    public Mono<Void> deleteMovieInfoById(String id) {
+        return movieInfoRepository.deleteById(id).log();
+    }
+
+    @Override
+    public Mono<Void> deleteAll() {
+        return movieInfoRepository.deleteAll().log();
+    }
 }
