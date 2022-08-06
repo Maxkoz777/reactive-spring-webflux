@@ -4,6 +4,7 @@ package com.reactivespring.moviesinfoservice.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.reactivespring.moviesinfoservice.domain.dto.MovieInfoDto;
 import com.reactivespring.moviesinfoservice.domain.entity.MovieInfo;
 import com.reactivespring.moviesinfoservice.service.MovieInfoService;
 import java.time.LocalDate;
@@ -71,6 +72,30 @@ class MovieInfoControllerUnitTest {
                 var result = movieInfoEntityExchangeResult.getResponseBody();
                 assertNotNull(result);
                 assertEquals("Dark Knight Rises", result.getName());
+            });
+    }
+
+    @Test
+    void update() {
+        var movieInfoDto = new MovieInfoDto("name", 2005, List.of("Christian Bale", "Michael Cane"),
+                                            LocalDate.parse("2005-06-15"));
+        var movieInfo = new MovieInfo("id", "name", 2012, List.of("Christian Bale", "Tom Hardy"),
+                                      LocalDate.parse("2012-07-20"));
+
+        Mockito.when(movieInfoService.updateMovieInfo(Mockito.isA(String.class), Mockito.isA(MovieInfoDto.class)))
+                .thenReturn(Mono.just(movieInfo));
+
+        webTestClient.put()
+            .uri(MOVIES_INFO_URL + "/{id}", "id")
+            .bodyValue(movieInfoDto)
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .expectBody(MovieInfo.class)
+            .consumeWith(movieInfoEntityExchangeResult -> {
+                var result = movieInfoEntityExchangeResult.getResponseBody();
+                assertNotNull(result);
+                assertEquals("id", result.getMovieInfoId());
+                assertEquals("name", result.getName());
             });
     }
 
