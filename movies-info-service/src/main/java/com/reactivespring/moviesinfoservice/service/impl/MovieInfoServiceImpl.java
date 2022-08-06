@@ -19,6 +19,6 @@ public class MovieInfoServiceImpl implements MovieInfoService {
     @Override
     public Mono<MovieInfo> addMovieInfo(MovieInfoDto movieInfoDto) {
         var movieInfo = movieInfoMapper.movieInfoDtoToMovieInfo(movieInfoDto);
-        return movieInfoRepository.save(movieInfo);
+        return movieInfoRepository.save(movieInfo).log();
     }
 }
