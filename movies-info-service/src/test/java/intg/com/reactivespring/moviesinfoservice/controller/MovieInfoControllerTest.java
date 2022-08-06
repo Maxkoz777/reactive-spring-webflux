@@ -82,4 +82,18 @@ class MovieInfoControllerTest {
             .verifyComplete();
     }
 
+    @Test
+    void getById() {
+        webTestClient.get()
+            .uri(MOVIES_INFO_URL + "/{id}", "id")
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .expectBody(MovieInfo.class)
+            .consumeWith(movieInfoEntityExchangeResult -> {
+                var result = movieInfoEntityExchangeResult.getResponseBody();
+                assertNotNull(result);
+                assertEquals("Dark Knight Rises", result.getName());
+            });
+    }
+
 }
