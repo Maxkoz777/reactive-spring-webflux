@@ -1,6 +1,9 @@
 package com.reactivespring.moviesinfoservice.controller;
 
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.reactivespring.moviesinfoservice.domain.entity.MovieInfo;
 import com.reactivespring.moviesinfoservice.service.MovieInfoService;
 import java.time.LocalDate;
@@ -13,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @AutoConfigureWebTestClient
@@ -49,6 +53,25 @@ class MovieInfoControllerUnitTest {
             .as(StepVerifier::create)
             .expectNextCount(3)
             .verifyComplete();
+    }
+
+    @Test
+    void getById() {
+        var movieInfo = new MovieInfo("id", "Dark Knight Rises", 2012, List.of("Christian Bale", "Tom Hardy"),
+                                      LocalDate.parse("2012-07-20"));
+
+        Mockito.when(movieInfoService.getMovieInfoById(Mockito.isA(String.class))).thenReturn(Mono.just(movieInfo));
+
+        webTestClient.get()
+            .uri(MOVIES_INFO_URL + "/{id}", "id")
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .expectBody(MovieInfo.class)
+            .consumeWith(movieInfoEntityExchangeResult -> {
+                var result = movieInfoEntityExchangeResult.getResponseBody();
+                assertNotNull(result);
+                assertEquals("Dark Knight Rises", result.getName());
+            });
     }
 
 }
