@@ -25,9 +25,12 @@ class MovieInfoRepositoryTest {
     @BeforeEach
     void beforeEach() {
         var movieInfoList = List.of(
-            new MovieInfo(null, "Batman Begins", 2005, List.of("Christian Bale", "Michael Cane"), LocalDate.parse("2005-06-15")),
-            new MovieInfo(null, "The Dark Knight", 2005, List.of("Christian Bale", "Heath Ledger"), LocalDate.parse("2008-07-18")),
-            new MovieInfo("id", "Dark Knight Rises", 2012, List.of("Christian Bale", "Tom Hardy"), LocalDate.parse("2012-07-20"))
+            new MovieInfo(null, "Batman Begins", 2005, List.of("Christian Bale", "Michael Cane"),
+                          LocalDate.parse("2005-06-15")),
+            new MovieInfo(null, "The Dark Knight", 2005, List.of("Christian Bale", "Heath Ledger"),
+                          LocalDate.parse("2008-07-18")),
+            new MovieInfo("id", "Dark Knight Rises", 2012, List.of("Christian Bale", "Tom Hardy"),
+                          LocalDate.parse("2012-07-20"))
         );
         movieInfoRepository.saveAll(movieInfoList).log().blockLast();
     }
@@ -60,13 +63,13 @@ class MovieInfoRepositoryTest {
     @Test
     void save() {
         movieInfoRepository.save(
-            new MovieInfo(null,
-                          "name",
-                          2005,
-                          List.of("actor1", "actor2"),
-                          LocalDate.parse("2008-07-18")
+                new MovieInfo(null,
+                              "name",
+                              2005,
+                              List.of("actor1", "actor2"),
+                              LocalDate.parse("2008-07-18")
+                )
             )
-        )
             .log()
             .as(StepVerifier::create)
             .assertNext(movieInfo -> {
