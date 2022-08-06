@@ -1,6 +1,7 @@
 package com.reactivespring.moviesinfoservice.service;
 
-import com.reactivespring.moviesinfoservice.domain.MovieInfo;
+import com.reactivespring.moviesinfoservice.domain.dto.MovieInfoDto;
+import com.reactivespring.moviesinfoservice.domain.entity.MovieInfo;
 import reactor.core.publisher.Mono;
 
 public interface MovieInfoService {
@@ -8,8 +9,8 @@ public interface MovieInfoService {
 
     /**
      * adds movie info to mongo
-     * @param movieInfo is an instance to add
+     * @param movieInfoDto is a dto instance to add
      */
-    Mono<MovieInfo> addMovieInfo(MovieInfo movieInfo);
+    Mono<MovieInfo> addMovieInfo(MovieInfoDto movieInfoDto);
 
 }
