@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.test.StepVerifier;
 
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
@@ -67,4 +68,18 @@ class MovieInfoControllerTest {
                 assertEquals("Batman Begins1", result.getName());
             });
     }
+
+    @Test
+    void getAllMovieInfos() {
+        webTestClient.get()
+            .uri(MOVIES_INFO_URL)
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .returnResult(MovieInfo.class)
+            .getResponseBody()
+            .as(StepVerifier::create)
+            .expectNextCount(3)
+            .verifyComplete();
+    }
+
 }
