@@ -96,4 +96,48 @@ class MovieInfoControllerTest {
             });
     }
 
+    @Test
+    void update() {
+        var movieInfoDto = new MovieInfoDto("name", 2005, List.of("Christian Bale", "Michael Cane"),
+                                         LocalDate.parse("2005-06-15"));
+        webTestClient.put()
+            .uri(MOVIES_INFO_URL + "/{id}", "id")
+            .bodyValue(movieInfoDto)
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .expectBody(MovieInfo.class)
+            .consumeWith(movieInfoEntityExchangeResult -> {
+                var result = movieInfoEntityExchangeResult.getResponseBody();
+                assertNotNull(result);
+                assertEquals("id", result.getMovieInfoId());
+                assertEquals("name", result.getName());
+            });
+    }
+
+    @Test
+    void deleteById() {
+        webTestClient.delete()
+            .uri(MOVIES_INFO_URL + "/{id}", "id")
+            .exchange()
+            .expectStatus().is2xxSuccessful();
+        webTestClient.get()
+            .uri(MOVIES_INFO_URL)
+            .exchange()
+            .expectBodyList(MovieInfo.class)
+            .hasSize(2);
+    }
+
+    @Test
+    void deleteAll() {
+        webTestClient.delete()
+            .uri(MOVIES_INFO_URL)
+            .exchange()
+            .expectStatus().is2xxSuccessful();
+        webTestClient.get()
+            .uri(MOVIES_INFO_URL)
+            .exchange()
+            .expectBodyList(MovieInfo.class)
+            .hasSize(0);
+    }
+
 }
