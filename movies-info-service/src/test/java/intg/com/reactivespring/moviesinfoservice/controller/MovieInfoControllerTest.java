@@ -70,6 +70,18 @@ class MovieInfoControllerTest {
     }
 
     @Test
+    void addMovieInfoValidationFailed() {
+        var movieInfo = new MovieInfoDto("Batman Begins1", null, List.of("Christian Bale", "Michael Cane"),
+                                         LocalDate.parse("2005-06-15"));
+
+        webTestClient.post()
+            .uri(MOVIES_INFO_URL)
+            .bodyValue(movieInfo)
+            .exchange()
+            .expectStatus().isBadRequest();
+    }
+
+    @Test
     void getAllMovieInfos() {
         webTestClient.get()
             .uri(MOVIES_INFO_URL)
@@ -112,6 +124,17 @@ class MovieInfoControllerTest {
                 assertEquals("id", result.getMovieInfoId());
                 assertEquals("name", result.getName());
             });
+    }
+
+    @Test
+    void updateValidationFailed() {
+        var movieInfoDto = new MovieInfoDto("name", 2005, List.of(),
+                                            LocalDate.parse("2005-06-15"));
+        webTestClient.put()
+            .uri(MOVIES_INFO_URL + "/{id}", "id")
+            .bodyValue(movieInfoDto)
+            .exchange()
+            .expectStatus().isBadRequest();
     }
 
     @Test

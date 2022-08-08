@@ -3,6 +3,7 @@ package com.reactivespring.moviesinfoservice.controller;
 import com.reactivespring.moviesinfoservice.domain.dto.MovieInfoDto;
 import com.reactivespring.moviesinfoservice.domain.entity.MovieInfo;
 import com.reactivespring.moviesinfoservice.service.MovieInfoService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +27,7 @@ public class MovieInfoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<MovieInfo> addMovieInfo(@RequestBody MovieInfoDto movieInfoDto) {
+    public Mono<MovieInfo> addMovieInfo(@RequestBody @Valid MovieInfoDto movieInfoDto) {
         return movieInfoService.addMovieInfo(movieInfoDto);
     }
 
@@ -41,7 +42,10 @@ public class MovieInfoController {
     }
 
     @PutMapping("/{id}")
-    public Mono<MovieInfo> updateMovieInfoForId(@RequestBody MovieInfoDto movieInfoDto, @PathVariable String id) {
+    public Mono<MovieInfo> updateMovieInfoForId(
+        @RequestBody @Valid MovieInfoDto movieInfoDto,
+        @PathVariable String id)
+    {
         return movieInfoService.updateMovieInfo(id, movieInfoDto);
     }
 
