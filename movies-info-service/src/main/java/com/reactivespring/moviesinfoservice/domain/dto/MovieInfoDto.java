@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieInfoDto {
-    @NotBlank
+    @NotBlank(message = "name should be specified")
     private String name;
-    @NotNull
-    @Positive
+    @NotNull(message = "year should be specified")
+    @Positive(message = "year should be positive")
     private Integer year;
-    @Size(min = 1)
+    @Size(min = 1, message = "specify at least 1 actor/actress")
     private List<String> cast;
-    @PastOrPresent
+    @PastOrPresent(message = "Date should be in the past")
     private LocalDate releaseDate;
 }
