@@ -57,6 +57,29 @@ class MovieInfoControllerUnitTest {
     }
 
     @Test
+    void addMovieInfo() {
+        var movieInfoDto = new MovieInfoDto("Batman Begins1", 2005, List.of("Christian Bale", "Michael Cane"),
+                                         LocalDate.parse("2005-06-15"));
+
+        var movieInfo = new MovieInfo(null, "Batman Begins1", 2005, List.of("Christian Bale", "Michael Cane"),
+                                      LocalDate.parse("2005-06-15"));
+
+        Mockito.when(movieInfoService.addMovieInfo(Mockito.isA(MovieInfoDto.class))).thenReturn(Mono.just(movieInfo));
+
+        webTestClient.post()
+            .uri(MOVIES_INFO_URL)
+            .bodyValue(movieInfoDto)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody(MovieInfo.class)
+            .consumeWith(movieInfoEntityExchangeResult -> {
+                var result = movieInfoEntityExchangeResult.getResponseBody();
+                assertNotNull(result);
+                assertEquals("Batman Begins1", result.getName());
+            });
+    }
+
+    @Test
     void addMovieInfoValidationFailed() {
         var movieInfo = new MovieInfoDto("Batman Begins1", null, List.of("Christian Bale", "Michael Cane"),
                                          LocalDate.parse("2005-06-15"));
