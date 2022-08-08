@@ -99,4 +99,28 @@ class MovieInfoControllerUnitTest {
             });
     }
 
+    @Test
+    void deleteById() {
+        var movieInfoList = List.of(
+            new MovieInfo(null, "Batman Begins", 2005, List.of("Christian Bale", "Michael Cane"),
+                          LocalDate.parse("2005-06-15")),
+            new MovieInfo(null, "The Dark Knight", 2005, List.of("Christian Bale", "Heath Ledger"),
+                          LocalDate.parse("2008-07-18"))
+        );
+
+        Mockito.when(movieInfoService.getAllMovieInfos()).thenReturn(Flux.fromIterable(movieInfoList));
+
+        Mockito.when(movieInfoService.deleteMovieInfoById(Mockito.isA(String.class))).thenReturn(Mono.empty());
+
+        webTestClient.delete()
+            .uri(MOVIES_INFO_URL + "/{id}", "id")
+            .exchange()
+            .expectStatus().is2xxSuccessful();
+        webTestClient.get()
+            .uri(MOVIES_INFO_URL)
+            .exchange()
+            .expectBodyList(MovieInfo.class)
+            .hasSize(2);
+    }
+
 }
