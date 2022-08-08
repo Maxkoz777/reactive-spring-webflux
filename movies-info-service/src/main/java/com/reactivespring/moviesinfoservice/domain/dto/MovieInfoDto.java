@@ -22,6 +22,6 @@ public class MovieInfoDto {
     private Integer year;
     @Size(min = 1, message = "specify at least 1 actor/actress")
     private List<String> cast;
-    @PastOrPresent(message = "Date should be in the past")
+    @PastOrPresent(message = "date should be in the past")
     private LocalDate releaseDate;
 }
