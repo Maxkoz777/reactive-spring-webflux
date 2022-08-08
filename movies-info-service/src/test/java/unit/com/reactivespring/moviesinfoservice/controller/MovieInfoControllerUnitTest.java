@@ -109,7 +109,6 @@ class MovieInfoControllerUnitTest {
         );
 
         Mockito.when(movieInfoService.getAllMovieInfos()).thenReturn(Flux.fromIterable(movieInfoList));
-
         Mockito.when(movieInfoService.deleteMovieInfoById(Mockito.isA(String.class))).thenReturn(Mono.empty());
 
         webTestClient.delete()
@@ -121,6 +120,24 @@ class MovieInfoControllerUnitTest {
             .exchange()
             .expectBodyList(MovieInfo.class)
             .hasSize(2);
+    }
+
+    @Test
+    void deleteAll() {
+        List<MovieInfo> movieInfos = List.of();
+
+        Mockito.when(movieInfoService.getAllMovieInfos()).thenReturn(Flux.fromIterable(movieInfos));
+        Mockito.when(movieInfoService.deleteAll()).thenReturn(Mono.empty());
+
+        webTestClient.delete()
+            .uri(MOVIES_INFO_URL)
+            .exchange()
+            .expectStatus().is2xxSuccessful();
+        webTestClient.get()
+            .uri(MOVIES_INFO_URL)
+            .exchange()
+            .expectBodyList(MovieInfo.class)
+            .hasSize(0);
     }
 
 }
