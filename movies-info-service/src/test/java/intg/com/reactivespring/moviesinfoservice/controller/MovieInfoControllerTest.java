@@ -115,6 +115,17 @@ class MovieInfoControllerTest {
     }
 
     @Test
+    void updateNotFound() {
+        var movieInfoDto = new MovieInfoDto("name", 2005, List.of("Christian Bale", "Michael Cane"),
+                                            LocalDate.parse("2005-06-15"));
+        webTestClient.put()
+            .uri(MOVIES_INFO_URL + "/{id}", "wrongId")
+            .bodyValue(movieInfoDto)
+            .exchange()
+            .expectStatus().isNotFound();
+    }
+
+    @Test
     void deleteById() {
         webTestClient.delete()
             .uri(MOVIES_INFO_URL + "/{id}", "id")
