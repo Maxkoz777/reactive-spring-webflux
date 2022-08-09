@@ -27,7 +27,7 @@ class MovieInfoRepositoryTest {
         var movieInfoList = List.of(
             new MovieInfo(null, "Batman Begins", 2005, List.of("Christian Bale", "Michael Cane"),
                           LocalDate.parse("2005-06-15")),
-            new MovieInfo(null, "The Dark Knight", 2005, List.of("Christian Bale", "Heath Ledger"),
+            new MovieInfo(null, "The Dark Knight", 2008, List.of("Christian Bale", "Heath Ledger"),
                           LocalDate.parse("2008-07-18")),
             new MovieInfo("id", "Dark Knight Rises", 2012, List.of("Christian Bale", "Tom Hardy"),
                           LocalDate.parse("2012-07-20"))
@@ -47,6 +47,15 @@ class MovieInfoRepositoryTest {
 
         StepVerifier.create(flux)
             .expectNextCount(3)
+            .verifyComplete();
+    }
+
+    @Test
+    void findAllByYear() {
+        var flux = movieInfoRepository.findByYear(2005).log();
+
+        StepVerifier.create(flux)
+            .expectNextCount(1)
             .verifyComplete();
     }
 
