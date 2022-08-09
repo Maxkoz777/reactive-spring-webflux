@@ -23,6 +23,13 @@ public interface MovieInfoService {
 
     /**
      *
+     * @param year is a filtering year
+     * @return all movie infos with provided year
+     */
+    Flux<MovieInfo> getAllMovieInfosByYear(Integer year);
+
+    /**
+     *
      * @param id - movie info id
      * @return movieInfo by provided id
      */
