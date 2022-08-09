@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.test.StepVerifier;
 
 @ActiveProfiles("test")
@@ -38,7 +39,7 @@ class MovieInfoControllerTest {
         var movieInfoList = List.of(
             new MovieInfo(null, "Batman Begins", 2005, List.of("Christian Bale", "Michael Cane"),
                           LocalDate.parse("2005-06-15")),
-            new MovieInfo(null, "The Dark Knight", 2005, List.of("Christian Bale", "Heath Ledger"),
+            new MovieInfo(null, "The Dark Knight", 2008, List.of("Christian Bale", "Heath Ledger"),
                           LocalDate.parse("2008-07-18")),
             new MovieInfo("id", "Dark Knight Rises", 2012, List.of("Christian Bale", "Tom Hardy"),
                           LocalDate.parse("2012-07-20"))
@@ -79,6 +80,23 @@ class MovieInfoControllerTest {
             .getResponseBody()
             .as(StepVerifier::create)
             .expectNextCount(3)
+            .verifyComplete();
+    }
+
+    @Test
+    void getAllMovieInfosByYear() {
+        var uri = UriComponentsBuilder.fromUriString(MOVIES_INFO_URL)
+                .queryParam("year", 2005)
+            .buildAndExpand().toUri();
+
+        webTestClient.get()
+            .uri(uri)
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .returnResult(MovieInfo.class)
+            .getResponseBody()
+            .as(StepVerifier::create)
+            .expectNextCount(1)
             .verifyComplete();
     }
 
