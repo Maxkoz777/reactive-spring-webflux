@@ -6,6 +6,7 @@ import com.reactivespring.moviesinfoservice.service.MovieInfoService;
 import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RestController
 @RequestMapping("/v1/movieInfo")
 @RequiredArgsConstructor
@@ -39,8 +41,10 @@ public class MovieInfoController {
         @RequestParam(value = "year", required = false) Integer year
     ) {
         if (Objects.nonNull(year)) {
+            log.info("Year is: {}", year);
             return movieInfoService.getAllMovieInfosByYear(year);
         } else {
+            log.info("No year specified, retrieving all MovieInfos");
             return movieInfoService.getAllMovieInfos();
         }
     }
