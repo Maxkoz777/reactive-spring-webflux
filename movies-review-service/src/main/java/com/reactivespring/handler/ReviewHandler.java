@@ -24,4 +24,9 @@ public class ReviewHandler {
 
     }
 
+    public Mono<ServerResponse> getReviews(ServerRequest request) {
+        var flux = repository.findAll().log();
+        return ServerResponse.ok().body(flux, Review.class);
+    }
+
 }
