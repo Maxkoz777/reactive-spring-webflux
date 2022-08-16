@@ -4,6 +4,10 @@ plugins {
 	id 'java'
 }
 
+compileJava {
+	options.compilerArgs << '-Amapstruct.defaultComponentModel=spring'
+}
+
 group = 'com.reactivespring'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -28,6 +32,10 @@ dependencies {
 	//lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	//mapstruct
+	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 
 	//test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
