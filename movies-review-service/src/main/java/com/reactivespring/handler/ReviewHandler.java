@@ -1,6 +1,7 @@
 package com.reactivespring.handler;
 
 import com.reactivespring.domain.Review;
+import com.reactivespring.domain.mapper.ReviewMapper;
 import com.reactivespring.repository.ReviewReactiveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ public class ReviewHandler {
 
     private final ReviewReactiveRepository repository;
 
+    private final ReviewMapper mapper;
+
     public Mono<ServerResponse> addReview(ServerRequest request) {
 
         return request.bodyToMono(Review.class)
@@ -24,9 +27,21 @@ public class ReviewHandler {
 
     }
 
-    public Mono<ServerResponse> getReviews(ServerRequest request) {
+    public Mono<ServerResponse> getReviews(ServerRequest ignoredRequest) {
         var flux = repository.findAll().log();
         return ServerResponse.ok().body(flux, Review.class);
     }
 
+    public Mono<ServerResponse> updateReview(ServerRequest request) {
+
+        return repository.findById(request.pathVariable("id"))
+            .flatMap(review -> request.bodyToMono(Review.class)
+                .flatMap(reqReview -> {
+                    mapper.updateMovieReviewFromReview(reqReview, review);
+                    return repository.save(review);
+                })
+                .flatMap(saved -> ServerResponse.ok().bodyValue(saved))
+            );
+
+    }
 }
