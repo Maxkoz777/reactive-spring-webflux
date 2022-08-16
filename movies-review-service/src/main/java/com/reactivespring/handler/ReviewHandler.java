@@ -27,9 +27,16 @@ public class ReviewHandler {
 
     }
 
-    public Mono<ServerResponse> getReviews(ServerRequest ignoredRequest) {
-        var flux = repository.findAll().log();
-        return ServerResponse.ok().body(flux, Review.class);
+    public Mono<ServerResponse> getReviews(ServerRequest request) {
+
+        var movieInfoId = request.queryParam("movieInfoId");
+        if (movieInfoId.isPresent()) {
+            var movies = repository.findByMovieInfoId(Long.valueOf(movieInfoId.get()));
+            return ServerResponse.ok().body(movies, Review.class);
+        } else {
+            var flux = repository.findAll().log();
+            return ServerResponse.ok().body(flux, Review.class);
+        }
     }
 
     public Mono<ServerResponse> updateReview(ServerRequest request) {
