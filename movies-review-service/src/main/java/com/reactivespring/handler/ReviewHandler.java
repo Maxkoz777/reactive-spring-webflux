@@ -44,4 +44,10 @@ public class ReviewHandler {
             );
 
     }
+
+    public Mono<ServerResponse> deleteReview(ServerRequest request) {
+        var reviewMono = repository.findById(request.pathVariable("id"));
+        return reviewMono.flatMap(repository::delete)
+            .then(ServerResponse.noContent().build());
+    }
 }
