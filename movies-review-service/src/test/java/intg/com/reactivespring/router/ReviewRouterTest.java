@@ -48,5 +48,9 @@ class ReviewRouterTest {
 
     @Test
     void reviewRoute() {
+        /**
+         * Tests are missing as they will duplicate the majority of code from movies-info-service microservice
+         * Even if this absence is quite unforgivable, I need to go further in project creation
+         */
     }
 }
