@@ -3,6 +3,7 @@ package com.reactivespring.handler;
 import com.reactivespring.domain.Review;
 import com.reactivespring.domain.mapper.ReviewMapper;
 import com.reactivespring.exception.ReviewDataException;
+import com.reactivespring.exception.ReviewNotFoundException;
 import com.reactivespring.repository.ReviewReactiveRepository;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
@@ -62,7 +63,11 @@ public class ReviewHandler {
 
     public Mono<ServerResponse> updateReview(ServerRequest request) {
 
-        return repository.findById(request.pathVariable("id"))
+        String id = request.pathVariable("id");
+        Mono<Review> reviewMono = repository.findById(id)
+            .switchIfEmpty(Mono.error(new ReviewNotFoundException("No review found for provided id: " + id)));
+
+        return reviewMono
             .flatMap(review -> request.bodyToMono(Review.class)
                 .flatMap(reqReview -> {
                     mapper.updateMovieReviewFromReview(reqReview, review);
