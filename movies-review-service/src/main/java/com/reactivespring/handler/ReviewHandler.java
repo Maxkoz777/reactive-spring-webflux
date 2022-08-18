@@ -3,7 +3,6 @@ package com.reactivespring.handler;
 import com.reactivespring.domain.Review;
 import com.reactivespring.domain.mapper.ReviewMapper;
 import com.reactivespring.exception.ReviewDataException;
-import com.reactivespring.exception.ReviewNotFoundException;
 import com.reactivespring.repository.ReviewReactiveRepository;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
