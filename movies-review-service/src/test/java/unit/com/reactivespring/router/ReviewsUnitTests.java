@@ -55,6 +55,21 @@ public class ReviewsUnitTests {
             });
     }
 
+    @Test
+    void addReviewValidationFailed() {
+        var reviewDto = new Review(null, null, "Wow!!!", -9.0);
+
+        var review = new Review("createdId", 1L, "Wow!!!", 9.0);
+
+        Mockito.when(reactiveRepository.save(isA(Review.class))).thenReturn(Mono.just(review));
+
+        webTestClient.post()
+            .uri(MOVIES_REVIEW_URL)
+            .bodyValue(reviewDto)
+            .exchange()
+            .expectStatus().isBadRequest();
+    }
+
     /**
      * Whole test cases are missing for the same reason as integration tests (((
      */
