@@ -1,6 +1,7 @@
 package com.reactivespring.exception.handler;
 
 import com.reactivespring.exception.ReviewDataException;
+import com.reactivespring.exception.ReviewNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.io.buffer.DataBufferFactory;
@@ -18,11 +19,15 @@ public class GlobalErrorHandler implements ErrorWebExceptionHandler {
         log.error("Exception message: {}", ex.getMessage(), ex);
         DataBufferFactory dataBufferFactory = exchange.getResponse().bufferFactory();
         var errorMessage = dataBufferFactory.wrap(ex.getMessage().getBytes());
+        HttpStatus statusCode;
         if (ex instanceof ReviewDataException) {
-            exchange.getResponse().setStatusCode(HttpStatus.BAD_REQUEST);
+            statusCode = HttpStatus.BAD_REQUEST;
+        } else if (ex instanceof ReviewNotFoundException) {
+            statusCode = HttpStatus.NOT_FOUND;
         } else {
-            exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+            statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         }
+        exchange.getResponse().setStatusCode(statusCode);
         return exchange.getResponse().writeWith(Mono.just(errorMessage));
     }
 }
