@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.isA;
 
 import com.reactivespring.domain.Review;
 import com.reactivespring.domain.mapper.ReviewMapper;
+import com.reactivespring.exception.handler.GlobalErrorHandler;
 import com.reactivespring.handler.ReviewHandler;
 import com.reactivespring.repository.ReviewReactiveRepository;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 @WebFluxTest
-@ContextConfiguration(classes = {ReviewHandler.class, ReviewRouter.class})
+@ContextConfiguration(classes = {ReviewHandler.class, ReviewRouter.class, GlobalErrorHandler.class})
 @AutoConfigureWebTestClient
 public class ReviewsUnitTests {
 
@@ -67,7 +68,8 @@ public class ReviewsUnitTests {
             .uri(MOVIES_REVIEW_URL)
             .bodyValue(reviewDto)
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus().isBadRequest()
+            .expectBody(String.class).isEqualTo("movieInfoId can't be null, rating can only be a non-negative value");
     }
 
     /**
