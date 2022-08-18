@@ -64,8 +64,8 @@ public class ReviewHandler {
     public Mono<ServerResponse> updateReview(ServerRequest request) {
 
         String id = request.pathVariable("id");
-        Mono<Review> reviewMono = repository.findById(id)
-            .switchIfEmpty(Mono.error(new ReviewNotFoundException("No review found for provided id: " + id)));
+        Mono<Review> reviewMono = repository.findById(id);
+//            .switchIfEmpty(Mono.error(new ReviewNotFoundException("No review found for provided id: " + id)));
 
         return reviewMono
             .flatMap(review -> request.bodyToMono(Review.class)
@@ -74,7 +74,9 @@ public class ReviewHandler {
                     return repository.save(review);
                 })
                 .flatMap(saved -> ServerResponse.ok().bodyValue(saved))
-            );
+            )
+            // alternative approach for checking id for entity existence in system
+            .switchIfEmpty(ServerResponse.notFound().build());
 
     }
 
