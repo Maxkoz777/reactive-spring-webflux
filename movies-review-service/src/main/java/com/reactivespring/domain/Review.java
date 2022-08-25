@@ -17,7 +17,7 @@ public class Review {
     @Id
     private String reviewId;
     @NotNull(message = "movieInfoId can't be null")
-    private Long movieInfoId;
+    private String movieInfoId;
     private String comment;
     @Min(value = 0L, message = "rating can only be a non-negative value")
     private Double rating;

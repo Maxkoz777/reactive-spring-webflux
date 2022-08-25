@@ -6,6 +6,6 @@ import reactor.core.publisher.Flux;
 
 public interface ReviewReactiveRepository extends ReactiveMongoRepository<Review, String> {
 
-    Flux<Review> findByMovieInfoId(Long movieInfoId);
+    Flux<Review> findByMovieInfoId(String movieInfoId);
 
 }

@@ -52,7 +52,7 @@ public class ReviewHandler {
 
         var movieInfoId = request.queryParam("movieInfoId");
         if (movieInfoId.isPresent()) {
-            var movies = repository.findByMovieInfoId(Long.valueOf(movieInfoId.get()));
+            var movies = repository.findByMovieInfoId(movieInfoId.get());
             return ServerResponse.ok().body(movies, Review.class);
         } else {
             var flux = repository.findAll().log();
