@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Review {
 
     private String reviewId;
-    private Long movieInfoId;
+    private String movieInfoId;
     private String comment;
     //@Min(value = 0L, message = "rating.negative : rating is negative and please pass a non-negative value")
     private Double rating;
