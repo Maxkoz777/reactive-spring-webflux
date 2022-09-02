@@ -22,13 +22,13 @@ public class MoviesInfoRestClient {
 
     public Mono<MovieInfo> retrieveMovieInfo(String id) {
 
-        var url = movieInfoUrl.concat("/{id}");
+        var url = movieInfoUrl + "/{id}";
 
         return webClient.get()
             .uri(url, id)
             .retrieve()
             .onStatus(HttpStatus::is4xxClientError, clientResponse -> {
-                if (clientResponse.statusCode().equals(HttpStatus.NOT_FOUND)) {
+                if (clientResponse.statusCode() == HttpStatus.NOT_FOUND) {
                     log.error("Error status code: {}", clientResponse.statusCode().value());
                     return Mono.error(new MoviesInfoClientException(
                         "There is no movie Info for provided id: " + id,
