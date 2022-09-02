@@ -1,0 +1,10 @@
+{
+  "movieInfoId": "1",
+  "name": "Batman",
+  "year": 2005,
+  "cast": [
+    "Bale",
+    "Cane"
+  ],
+  "release_date": "2005-06-15"
+}
