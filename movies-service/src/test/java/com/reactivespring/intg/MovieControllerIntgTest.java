@@ -59,4 +59,86 @@ class MovieControllerIntgTest {
 
     }
 
+    @Test
+    void retrieveMovieByIdMovieInfoNotFound() {
+
+        var movieId = "mockId";
+
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/v1/movieInfo/" + movieId))
+                             .willReturn(WireMock.aResponse().withStatus(404)));
+
+        WireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/v1/review"))
+                             .willReturn(WireMock.aResponse()
+                                             .withHeader("Content-Type", "application/json")
+                                             .withBodyFile("reviews.json")));
+
+        webTestClient.get()
+            .uri("/v1/movie/{id}", movieId)
+            .exchange()
+            .expectStatus().is4xxClientError()
+            .expectBody(String.class)
+            .consumeWith(stringEntityExchangeResult -> {
+                var message = stringEntityExchangeResult.getResponseBody();
+                Assertions.assertEquals("There is no movie Info for provided id: " + movieId, message,
+                                        "Actual error message is different from expected");
+            });
+
+    }
+
+    @Test
+    void retrieveMovieByIdReviewNotFound() {
+
+        var movieId = "mockId";
+
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/v1/movieInfo/" + movieId))
+                             .willReturn(WireMock.aResponse()
+                                             .withHeader("Content-Type", "application/json")
+                                             .withBodyFile("movieInfo.json")));
+
+        WireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/v1/review"))
+                             .willReturn(WireMock.aResponse().withStatus(404)));
+
+        webTestClient.get()
+            .uri("/v1/movie/{id}", movieId)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(Movie.class)
+            .consumeWith(movieEntityExchangeResult -> {
+                var movie = movieEntityExchangeResult.getResponseBody();
+                Assertions.assertNotNull(movie, "movie should exist");
+                Assertions.assertEquals(0, movie.getReviewList().size(),
+                                        "There should be no reviews for movie entity");
+                Assertions.assertEquals("Batman", movie.getMovieInfo().getName(),
+                                        "Movie name should match the predefined name");
+
+            });
+
+    }
+
+    @Test
+    void retrieveMovieById5xxError() {
+
+        var movieId = "mockId";
+
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/v1/movieInfo/" + movieId))
+                             .willReturn(WireMock.aResponse().withStatus(500).withBody("MovieInfo Service Unavailable")));
+
+        WireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/v1/review"))
+                             .willReturn(WireMock.aResponse()
+                                             .withHeader("Content-Type", "application/json")
+                                             .withBodyFile("reviews.json")));
+
+        webTestClient.get()
+            .uri("/v1/movie/{id}", movieId)
+            .exchange()
+            .expectStatus().is5xxServerError()
+            .expectBody(String.class)
+            .consumeWith(stringEntityExchangeResult -> {
+                var message = stringEntityExchangeResult.getResponseBody();
+                Assertions.assertEquals("Server exception in movie-info-service MovieInfo Service Unavailable", message,
+                                        "Actual error message is different from expected");
+            });
+
+    }
+
 }
