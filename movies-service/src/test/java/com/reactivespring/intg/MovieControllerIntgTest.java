@@ -139,6 +139,8 @@ class MovieControllerIntgTest {
                                         "Actual error message is different from expected");
             });
 
+        WireMock.verify(4, WireMock.getRequestedFor(WireMock.urlEqualTo("/v1/movieInfo/" + movieId)));
+
     }
 
 }
