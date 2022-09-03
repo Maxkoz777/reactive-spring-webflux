@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@SuppressWarnings("MagicNumber")
 public class MoviesInfoRestClient {
 
     private final WebClient webClient;
@@ -52,7 +53,9 @@ public class MoviesInfoRestClient {
                         new MoviesInfoServerException("Server exception in movie-info-service " + message))
                     );
             })
-            .bodyToMono(MovieInfo.class).log();
+            .bodyToMono(MovieInfo.class)
+            .retry(3L)
+            .log();
 
     }
 
