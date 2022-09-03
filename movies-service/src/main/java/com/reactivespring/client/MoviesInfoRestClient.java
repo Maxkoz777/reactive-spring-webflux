@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.Exceptions;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
@@ -27,6 +28,10 @@ public class MoviesInfoRestClient {
     public Mono<MovieInfo> retrieveMovieInfo(String id) {
 
         var url = movieInfoUrl + "/{id}";
+
+        var retrySpec = Retry.fixedDelay(3L, Duration.ofSeconds(1L))
+            .filter(MoviesInfoServerException.class::isInstance)
+            .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> Exceptions.propagate(retrySignal.failure()));
 
         return webClient.get()
             .uri(url, id)
@@ -57,7 +62,7 @@ public class MoviesInfoRestClient {
             })
             .bodyToMono(MovieInfo.class)
 //            .retry(3L)
-            .retryWhen(Retry.fixedDelay(3L, Duration.ofSeconds(1L)))
+            .retryWhen(retrySpec)
             .log();
 
     }
