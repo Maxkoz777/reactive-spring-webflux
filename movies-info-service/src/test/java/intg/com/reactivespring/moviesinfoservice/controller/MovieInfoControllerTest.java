@@ -84,6 +84,35 @@ class MovieInfoControllerTest {
     }
 
     @Test
+    void getServerSentEventsTest() {
+        var movieInfo = new MovieInfoDto("Batman Begins1", 2005, List.of("Christian Bale", "Michael Cane"),
+                                         LocalDate.parse("2005-06-15"));
+
+        webTestClient.post()
+            .uri(MOVIES_INFO_URL)
+            .bodyValue(movieInfo)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody(MovieInfo.class)
+            .consumeWith(movieInfoEntityExchangeResult -> {
+                var result = movieInfoEntityExchangeResult.getResponseBody();
+                assertNotNull(result);
+                assertEquals("Batman Begins1", result.getName());
+            });
+
+        webTestClient.get()
+            .uri(MOVIES_INFO_URL + "/stream")
+            .exchange()
+            .expectStatus().is2xxSuccessful()
+            .returnResult(MovieInfo.class)
+            .getResponseBody()
+            .as(StepVerifier::create)
+            .assertNext(movieInfo1 -> assertNotNull(movieInfo1, "Movie info can't be null"))
+            .thenCancel()
+            .verify();
+    }
+
+    @Test
     void getAllMovieInfosByYear() {
         var uri = UriComponentsBuilder.fromUriString(MOVIES_INFO_URL)
                 .queryParam("year", 2005)
@@ -96,7 +125,7 @@ class MovieInfoControllerTest {
             .returnResult(MovieInfo.class)
             .getResponseBody()
             .as(StepVerifier::create)
-            .expectNextCount(1)
+            .expectNextCount(1L)
             .verifyComplete();
     }
 
