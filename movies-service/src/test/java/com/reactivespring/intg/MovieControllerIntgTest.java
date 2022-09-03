@@ -145,4 +145,32 @@ class MovieControllerIntgTest {
 
     }
 
+    @Test
+    void retrieveMovieById5xxErrorReviewService() {
+
+        var movieId = "mockId";
+
+        WireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/v1/movieInfo/" + movieId))
+                             .willReturn(WireMock.aResponse()
+                                             .withHeader("Content-Type", "application/json")
+                                             .withBodyFile("movieInfo.json")));
+
+        WireMock.stubFor(WireMock.get(WireMock.urlPathEqualTo("/v1/review"))
+                             .willReturn(WireMock.aResponse().withStatus(500).withBody("Review Service Unavailable")));
+
+        webTestClient.get()
+            .uri("/v1/movie/{id}", movieId)
+            .exchange()
+            .expectStatus().is5xxServerError()
+            .expectBody(String.class)
+            .consumeWith(stringEntityExchangeResult -> {
+                var message = stringEntityExchangeResult.getResponseBody();
+                Assertions.assertEquals("Server exception in movie-review-service Review Service Unavailable", message,
+                                        "Actual error message is different from expected");
+            });
+
+        WireMock.verify(4, WireMock.getRequestedFor(WireMock.urlPathMatching("/v1/review")));
+
+    }
+
 }
