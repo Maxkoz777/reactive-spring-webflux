@@ -10,10 +10,12 @@ import javax.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 
 @Slf4j
 @Component
@@ -26,11 +28,14 @@ public class ReviewHandler {
 
     private final ReviewMapper mapper;
 
+    private final Sinks.Many<Review> reviewSink = Sinks.many().replay().latest();
+
     public Mono<ServerResponse> addReview(ServerRequest request) {
 
         return request.bodyToMono(Review.class)
             .doOnNext(this::validate)
             .flatMap(repository::save)
+            .doOnNext(reviewSink::tryEmitNext)
             .flatMap(ServerResponse.status(HttpStatus.CREATED)::bodyValue)
             .log();
 
@@ -83,5 +88,11 @@ public class ReviewHandler {
         var reviewMono = repository.findById(request.pathVariable("id"));
         return reviewMono.flatMap(repository::delete)
             .then(ServerResponse.noContent().build());
+    }
+
+    public Mono<ServerResponse> getStream(ServerRequest request) {
+        return ServerResponse.ok()
+            .contentType(MediaType.APPLICATION_NDJSON)
+            .body(reviewSink.asFlux(), Review.class).log();
     }
 }
