@@ -32,18 +32,18 @@ public class MovieInfoController {
 
     private final MovieInfoService movieInfoService;
 
-    private Sinks.Many<MovieInfo> moviesinfoSink = Sinks.many().replay().latest();
+    private final Sinks.Many<MovieInfo> moviesInfoSink = Sinks.many().replay().latest();
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<MovieInfo> addMovieInfo(@RequestBody @Valid MovieInfoDto movieInfoDto) {
         return movieInfoService.addMovieInfo(movieInfoDto)
-            .doOnNext(savedMovieInfo -> moviesinfoSink.tryEmitNext(savedMovieInfo));
+            .doOnNext(moviesInfoSink::tryEmitNext);
     }
 
     @GetMapping(value = "/stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
     public Flux<MovieInfo> getMovieInfoFluxStream() {
-        return moviesinfoSink.asFlux();
+        return moviesInfoSink.asFlux();
     }
 
     @GetMapping
