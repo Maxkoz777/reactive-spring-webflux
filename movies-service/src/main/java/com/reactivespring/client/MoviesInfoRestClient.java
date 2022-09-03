@@ -3,6 +3,7 @@ package com.reactivespring.client;
 import com.reactivespring.domain.MovieInfo;
 import com.reactivespring.exception.MoviesInfoClientException;
 import com.reactivespring.exception.MoviesInfoServerException;
+import com.reactivespring.util.RetryUtil;
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +29,6 @@ public class MoviesInfoRestClient {
     public Mono<MovieInfo> retrieveMovieInfo(String id) {
 
         var url = movieInfoUrl + "/{id}";
-
-        var retrySpec = Retry.fixedDelay(3L, Duration.ofSeconds(1L))
-            .filter(MoviesInfoServerException.class::isInstance)
-            .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> Exceptions.propagate(retrySignal.failure()));
 
         return webClient.get()
             .uri(url, id)
@@ -62,7 +59,7 @@ public class MoviesInfoRestClient {
             })
             .bodyToMono(MovieInfo.class)
 //            .retry(3L)
-            .retryWhen(retrySpec)
+            .retryWhen(RetryUtil.retrySpec())
             .log();
 
     }
