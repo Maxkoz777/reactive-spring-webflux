@@ -1,7 +1,5 @@
 package com.reactivespring.router;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.reactivespring.domain.Review;
 import com.reactivespring.repository.ReviewReactiveRepository;
 import java.util.List;
@@ -32,9 +30,9 @@ class ReviewRouterTest {
     void setUp() {
 
         var reviewList = List.of(
-            new Review(null, 1L, "Awesome Movie", 9.0),
-            new Review(null, 1L, "Awesome Movie1", 9.0),
-            new Review(null, 2L, "Excellent Movie", 8.0)
+            new Review(null, "1", "Awesome Movie", 9.0),
+            new Review(null, "1", "Awesome Movie1", 9.0),
+            new Review(null, "2", "Excellent Movie", 8.0)
         );
 
         reviewReactiveRepository.saveAll(reviewList).blockLast();

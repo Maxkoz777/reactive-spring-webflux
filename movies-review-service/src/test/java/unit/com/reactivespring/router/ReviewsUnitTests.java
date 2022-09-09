@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono;
 @WebFluxTest
 @ContextConfiguration(classes = {ReviewHandler.class, ReviewRouter.class, GlobalErrorHandler.class})
 @AutoConfigureWebTestClient
-public class ReviewsUnitTests {
+class ReviewsUnitTests {
 
     private final String MOVIES_REVIEW_URL = "/v1/review";
 
@@ -37,9 +37,9 @@ public class ReviewsUnitTests {
 
     @Test
     void addReview() {
-        var reviewDto = new Review(null, 1L, "Wow!!!", 9.0);
+        var reviewDto = new Review(null, "1", "Wow!!!", 9.0);
 
-        var review = new Review("createdId", 1L, "Wow!!!", 9.0);
+        var review = new Review("createdId", "1", "Wow!!!", 9.0);
 
         Mockito.when(reactiveRepository.save(isA(Review.class))).thenReturn(Mono.just(review));
 
@@ -60,7 +60,7 @@ public class ReviewsUnitTests {
     void addReviewValidationFailed() {
         var reviewDto = new Review(null, null, "Wow!!!", -9.0);
 
-        var review = new Review("createdId", 1L, "Wow!!!", 9.0);
+        var review = new Review("createdId", "1", "Wow!!!", 9.0);
 
         Mockito.when(reactiveRepository.save(isA(Review.class))).thenReturn(Mono.just(review));
 

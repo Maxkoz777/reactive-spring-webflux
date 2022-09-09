@@ -26,5 +26,5 @@ public class MovieInfo {
 
     @NotNull
     private List<@NotBlank(message = "movieInfo.cast must be present") String> cast;
-    private LocalDate release_date;
+    private LocalDate releaseDate;
 }
